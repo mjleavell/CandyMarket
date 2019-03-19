@@ -1,5 +1,7 @@
 # Candy Market Group Project
 
+[ERD](images/candyErd.PNG)
+
 ### Our Mission
 Our primary goal is to make the best candy inventory platform there is. Like any good technology company, we really insist that our platform run as a console app because... reasons.
 
