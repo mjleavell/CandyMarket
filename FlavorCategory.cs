@@ -1,0 +1,40 @@
+namespace candy_market
+{
+   enum FlavorCategory
+   {
+      Almond,
+      Apple,
+      Banana,
+      Blackberry,
+      Blueberry,
+      Butterscotch,
+      Caramel,
+      Cherry,
+      Chocolate,
+      Cinnamon,
+      Coffee,
+      Grape,
+      Lemon,
+      Licorice,
+      Maple,
+      Marshmallow,
+      Orange,
+      Peach,
+      PeanutButter,
+      Pecan,
+      Peppermint,
+      Pineapple,
+      Popcorn,
+      Raspberry,
+      RootBeer,
+      Spearmint,
+      Strawberry,
+      Sugar,
+      Tootsie,
+      Tropical,
+      Vanilla,
+      Walnut,
+      Watermelon,
+      Wintergreen
+   }
+}
