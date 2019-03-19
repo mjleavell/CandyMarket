@@ -9,23 +9,24 @@ namespace candy_market
         // Create our users for the system
         private static List<Users> candyUsers = new List<Users>()
             {
-                new Users(1, "Maggie"),
-                new Users(2, "Colin"),
-                new Users(3, "Tim"),
-                new Users(4, "Marco")
+                new Users(4, "Maggie"),
+                new Users(3, "Colin"),
+                new Users(2, "Tim"),
+                new Users(1, "Marco")
             };
 
         static void Main(string[] args)
 		{
 			var db = SetupNewApp();
            
-
 			var exit = false;
 			while (!exit)
 			{
-                ConsoleKeyInfo userMenuInput = UserMenu();
-				var userInput = MainMenu();
-				exit = TakeActions(db, userInput);
+                var userMenuInput = UserMenu();
+                //GetUserId(userMenuInput);
+                var user = GetUserId(userMenuInput);
+                var userInput = MainMenu(user);
+                exit = TakeActions(db, userInput);
 			}
 		}
 
@@ -40,7 +41,7 @@ namespace candy_market
 			return db;
 		}
 
-
+        // displays user menu
         internal static ConsoleKeyInfo UserMenu()
         {
             View userMenu = new View()
@@ -48,16 +49,18 @@ namespace candy_market
                     .AddMenuOptions(candyUsers.Select(u => u.Name).ToList())
                     .AddMenuText("Press Esc to exit.");
             Console.Write(userMenu.GetFullMenu());
-            var userOption = Console.ReadKey();
-            return userOption;
+            var selectedUser = Console.ReadKey();
+            return selectedUser;
         }
 
-        internal static ConsoleKeyInfo MainMenu()
-		{
-			View mainMenu = new View()
-					.AddMenuOption("Did you just get some new candy? Add it here.")
-					.AddMenuOption("Do you want to eat some candy? Take it here.")
-					.AddMenuText("Press Esc to exit.");
+        internal static ConsoleKeyInfo MainMenu(object selectedUser)
+        {
+            View mainMenu = new View()
+                    .AddMenuText($"Welcome {selectedUser}!!")
+                    .AddMenuOption("Did you just get some new candy? Add it here.")
+                    .AddMenuOption("Do you want to eat some candy? Take it here.")
+                    .AddMenuText("Press Esc to exit.");
+            Console.WriteLine(selectedUser["Name"]);
 			Console.Write(mainMenu.GetFullMenu());
 			var userOption = Console.ReadKey();
 			return userOption;
@@ -85,7 +88,17 @@ namespace candy_market
 			return true;
 		}
 
-		internal static void AddNewCandy(CandyStorage db)
+        internal static object GetUserId(ConsoleKeyInfo selectedUser)
+        {
+            var userInput = selectedUser.KeyChar.ToString();
+            var userIndex = int.Parse(userInput);
+            var user = candyUsers[userIndex - 1];
+            var userId = user.Id;
+            var userType = user.GetType();
+            return user;
+        }
+
+        internal static void AddNewCandy(CandyStorage db)
 		{
 			var newCandy = new Candy
 			{
