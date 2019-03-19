@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace candy_market
 {
@@ -7,6 +8,15 @@ namespace candy_market
 		static void Main(string[] args)
 		{
 			var db = SetupNewApp();
+            
+            // Create our users for the system
+            var candyUsers = new List<Users>
+            {
+                new Users(Guid.NewGuid(), "Maggie"),
+                new Users(Guid.NewGuid(), "Colin"),
+                new Users(Guid.NewGuid(), "Tim"),
+                new Users(Guid.NewGuid(), "Marco")
+            };
 
 			var exit = false;
 			while (!exit)
