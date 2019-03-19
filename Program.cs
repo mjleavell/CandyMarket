@@ -12,10 +12,10 @@ namespace candy_market
             // Create our users for the system
             var candyUsers = new List<Users>
             {
-                new Users(Guid.NewGuid(), "Maggie"),
-                new Users(Guid.NewGuid(), "Colin"),
-                new Users(Guid.NewGuid(), "Tim"),
-                new Users(Guid.NewGuid(), "Marco")
+                new Users(1, "Maggie"),
+                new Users(2, "Colin"),
+                new Users(3, "Tim"),
+                new Users(4, "Marco")
             };
 
 			var exit = false;
