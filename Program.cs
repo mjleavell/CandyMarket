@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace candy_market
 {
 	class Program
 	{
-		static void Main(string[] args)
-		{
-			var db = SetupNewApp();
-            
-            // Create our users for the system
-            var candyUsers = new List<Users>
+        // Create our users for the system
+        private static List<Users> candyUsers = new List<Users>()
             {
                 new Users(1, "Maggie"),
                 new Users(2, "Colin"),
@@ -18,10 +15,15 @@ namespace candy_market
                 new Users(4, "Marco")
             };
 
+        static void Main(string[] args)
+		{
+			var db = SetupNewApp();
+           
+
 			var exit = false;
 			while (!exit)
 			{
-                var userMenuInput = UserMenu();
+                ConsoleKeyInfo userMenuInput = UserMenu();
 				var userInput = MainMenu();
 				exit = TakeActions(db, userInput);
 			}
@@ -38,10 +40,12 @@ namespace candy_market
 			return db;
 		}
 
+
         internal static ConsoleKeyInfo UserMenu()
         {
             View userMenu = new View()
-                    .AddMenuOption("Select a user")
+                    .AddMenuText("Please select a user from the list below")
+                    .AddMenuOptions(candyUsers.Select(u => u.Name).ToList())
                     .AddMenuText("Press Esc to exit.");
             Console.Write(userMenu.GetFullMenu());
             var userOption = Console.ReadKey();
