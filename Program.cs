@@ -11,6 +11,7 @@ namespace candy_market
 			var exit = false;
 			while (!exit)
 			{
+                var userMenuInput = UserMenu();
 				var userInput = MainMenu();
 				exit = TakeActions(db, userInput);
 			}
@@ -27,7 +28,17 @@ namespace candy_market
 			return db;
 		}
 
-		internal static ConsoleKeyInfo MainMenu()
+        internal static ConsoleKeyInfo UserMenu()
+        {
+            View userMenu = new View()
+                    .AddMenuOption("Select a user")
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(userMenu.GetFullMenu());
+            var userOption = Console.ReadKey();
+            return userOption;
+        }
+
+        internal static ConsoleKeyInfo MainMenu()
 		{
 			View mainMenu = new View()
 					.AddMenuOption("Did you just get some new candy? Add it here.")
@@ -45,15 +56,18 @@ namespace candy_market
 			if (userInput.Key == ConsoleKey.Escape)
 				return true;
 
-			var selection = userInput.KeyChar.ToString();
-			switch (selection)
-			{
-				case "1": AddNewCandy(db);
-					break;
-				case "2": EatCandy(db);
-					break;
-				default: return true;
-			}
+            var selection = userInput.KeyChar.ToString();
+            switch (selection)
+            {
+                case "1":
+                    AddNewCandy(db);
+                    break;
+                case "2":
+                    EatCandy(db);
+                    break;
+                default: return true;
+            }
+ 
 			return true;
 		}
 
