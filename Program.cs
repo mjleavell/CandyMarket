@@ -9,10 +9,10 @@ namespace candy_market
         // Create our users for the system
         private static List<Users> candyUsers = new List<Users>()
             {
-                new Users(4, "Maggie"),
-                new Users(3, "Colin"),
-                new Users(2, "Tim"),
-                new Users(1, "Marco")
+                new Users(1, "Maggie"),
+                new Users(2, "Colin"),
+                new Users(3, "Tim"),
+                new Users(4, "Marco")
             };
 
         static void Main(string[] args)
@@ -23,8 +23,7 @@ namespace candy_market
 			while (!exit)
 			{
                 var userMenuInput = UserMenu();
-                //GetUserId(userMenuInput);
-                var user = GetUserId(userMenuInput);
+                var user = GetUser(userMenuInput);
                 var userInput = MainMenu(user);
                 exit = TakeActions(db, userInput);
 			}
@@ -41,7 +40,6 @@ namespace candy_market
 			return db;
 		}
 
-<<<<<<< HEAD
         // displays user menu
         internal static ConsoleKeyInfo UserMenu()
         {
@@ -54,14 +52,13 @@ namespace candy_market
             return selectedUser;
         }
 
-        internal static ConsoleKeyInfo MainMenu(object selectedUser)
+        internal static ConsoleKeyInfo MainMenu(Users activeUserName)
         {
             View mainMenu = new View()
-                    .AddMenuText($"Welcome {selectedUser}!!")
+                    .AddMenuText($"Welcome {activeUserName.Name}!!")
                     .AddMenuOption("Did you just get some new candy? Add it here.")
                     .AddMenuOption("Do you want to eat some candy? Take it here.")
                     .AddMenuText("Press Esc to exit.");
-            Console.WriteLine(selectedUser["Name"]);
 			Console.Write(mainMenu.GetFullMenu());
 			var userOption = Console.ReadKey();
 			return userOption;
@@ -89,13 +86,12 @@ namespace candy_market
 			return true;
 		}
 
-        internal static object GetUserId(ConsoleKeyInfo selectedUser)
+        // returns the name and id of the current user
+        internal static Users GetUser(ConsoleKeyInfo selectedUser)
         {
             var userInput = selectedUser.KeyChar.ToString();
             var userIndex = int.Parse(userInput);
             var user = candyUsers[userIndex - 1];
-            var userId = user.Id;
-            var userType = user.GetType();
             return user;
         }
 
