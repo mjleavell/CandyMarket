@@ -41,6 +41,7 @@ namespace candy_market
 			return db;
 		}
 
+<<<<<<< HEAD
         // displays user menu
         internal static ConsoleKeyInfo UserMenu()
         {
@@ -73,18 +74,18 @@ namespace candy_market
 			if (userInput.Key == ConsoleKey.Escape)
 				return true;
 
-            var selection = userInput.KeyChar.ToString();
-            switch (selection)
-            {
-                case "1":
-                    AddNewCandy(db);
+			var selection = userInput.KeyChar.ToString();
+
+			switch (selection)
+			{
+				case "1": AddNewCandy(db);
+					break;
+				case "2": EatCandy(db);
+					break;
+                case "3": TradeCandy(db);
                     break;
-                case "2":
-                    EatCandy(db);
-                    break;
-                default: return true;
-            }
- 
+				default: return true;
+			}
 			return true;
 		}
 
@@ -113,5 +114,10 @@ namespace candy_market
 		{
 			throw new NotImplementedException();
 		}
+
+        public static void TradeCandy(CandyStorage db)
+        {
+            throw new NotImplementedException();
+        }
 	}
 }
