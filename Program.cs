@@ -58,7 +58,9 @@ namespace candy_market
 			var selection = userInput.KeyChar.ToString();
 			switch (selection)
 			{
-				case "1": AddNewCandy(db);
+				case "1":
+                    var userNewCandy = AddCandyMenu(1, "Vanilla");
+                    AddNewCandy(db);
 					break;
 				case "2": EatCandy(db);
 					break;
@@ -66,6 +68,19 @@ namespace candy_market
 			}
 			return true;
 		}
+
+        private static string AddCandyMenu(int userId, string flavorCategory)
+        {
+            View addCandyMenu = new View()
+                    .AddMenuOption("Please provide the following as a Comma Seperated List:")
+                    .AddMenuText($"\nName, [{flavorCategory}], Quantity\n")
+                    //.AddMenuText($"[{flavorCategory}]")
+                    //.AddMenuText("Quantity")
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(addCandyMenu.GetFullMenu());
+            var newCandy = Console.ReadLine();
+            return newCandy;
+        }
 
 		internal static void AddNewCandy(CandyStorage db)
 		{
