@@ -4,8 +4,8 @@ using System.Linq;
 
 namespace candy_market
 {
-	class Program
-	{
+    class Program
+    {
         // Create our users for the system
         private static List<Users> candyUsers = new List<Users>()
             {
@@ -16,29 +16,29 @@ namespace candy_market
             };
 
         static void Main(string[] args)
-		{
-			var db = SetupNewApp();
-           
-			var exit = false;
-			while (!exit)
-			{
+        {
+            var db = SetupNewApp();
+
+            var exit = false;
+            while (!exit)
+            {
                 var userMenuInput = UserMenu();
                 var user = GetUser(userMenuInput);
                 var userInput = MainMenu(user);
-                exit = TakeActions(db, userInput);
-			}
-		}
+                exit = TakeActions(db, userInput, user.Id);
+            }
+        }
 
-		internal static CandyStorage SetupNewApp()
-		{
-			Console.Title = "Cross Confectioneries Incorporated";
-			Console.BackgroundColor = ConsoleColor.White;
-			Console.ForegroundColor = ConsoleColor.Black;
+        internal static CandyStorage SetupNewApp()
+        {
+            Console.Title = "Cross Confectioneries Incorporated";
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
 
-			var db = new CandyStorage();
+            var db = new CandyStorage();
 
-			return db;
-		}
+            return db;
+        }
 
         // displays user menu
         internal static ConsoleKeyInfo UserMenu()
@@ -60,32 +60,36 @@ namespace candy_market
                     .AddMenuOption("Do you want to eat some candy? Take it here.")
                     .AddMenuOption("Do you want to trade some candy?  Trade it here.")
                     .AddMenuText("Press Esc to exit.");
-			Console.Write(mainMenu.GetFullMenu());
-			var userOption = Console.ReadKey();
-			return userOption;
-		}
+            Console.Write(mainMenu.GetFullMenu());
+            var userOption = Console.ReadKey();
+            return userOption;
+        }
 
-		private static bool TakeActions(CandyStorage db, ConsoleKeyInfo userInput)
-		{
-			Console.Write(Environment.NewLine);
+        private static bool TakeActions(CandyStorage db, ConsoleKeyInfo userInput, int userId)
+        {
+            Console.Write(Environment.NewLine);
 
-			if (userInput.Key == ConsoleKey.Escape)
-				return true;
+            if (userInput.Key == ConsoleKey.Escape)
+                return true;
 
-			var selection = userInput.KeyChar.ToString();
+            var selection = userInput.KeyChar.ToString();
 
-			switch (selection)
-			{
-				case "1": AddNewCandy(db);
-					break;
-				case "2": EatCandy(db);
-					break;
-                case "3": TradeCandy(db);
+            switch (selection)
+            {
+                case "1":
+                    AddCandyMenu(db, userId);
+                    //AddNewCandy(db);
                     break;
-				default: return true;
-			}
-			return true;
-		}
+                case "2":
+                    EatCandy(db);
+                    break;
+                case "3":
+                    TradeCandy(db);
+                    break;
+                default: return true;
+            }
+            return false;
+        }
 
         // returns the name and id of the current user
         internal static Users GetUser(ConsoleKeyInfo selectedUser)
@@ -96,25 +100,56 @@ namespace candy_market
             return user;
         }
 
-        internal static void AddNewCandy(CandyStorage db)
-		{
-			var newCandy = new Candy
-			{
-				Name = "Whatchamacallit"
-			};
+        private static void AddCandyMenu(CandyStorage db, int userId)
+        {
+            //var flavorCategoryString = string.Join(",", flavorCategory);
+            View addCandyMenuName = new View()
+                    .AddMenuOption("Please provide the candy name:")
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(addCandyMenuName.GetFullMenu());
+            var newCandyName = Console.ReadLine();
 
-			var savedCandy = db.SaveNewCandy(newCandy);
-			Console.WriteLine($"Now you own the candy {savedCandy.Name}");
-		}
+            View addCandyMenuFlavor = new View()
+                    .AddMenuOption("Please provide a flavor or type:")
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(addCandyMenuFlavor.GetFullMenu());
+            var newCandyFlavor = Console.ReadLine();
 
-		private static void EatCandy(CandyStorage db)
-		{
-			throw new NotImplementedException();
-		}
+            View addCandyMenuManufacturer = new View()
+                   .AddMenuOption("Please provide the manufacturer:")
+                   .AddMenuText("Press Esc to exit.");
+            Console.Write(addCandyMenuManufacturer.GetFullMenu());
+            var newCandyManufacturer = Console.ReadLine();
+
+            View addCandyMenuQuantity = new View()
+                    .AddMenuOption("Please provide the Quantity you want to add:")
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(addCandyMenuQuantity.GetFullMenu());
+            var newCandyQuantity = Console.ReadLine();
+
+            AddNewCandy(db, newCandyName, newCandyFlavor, newCandyManufacturer, newCandyQuantity, userId);
+        }
+
+
+        internal static void AddNewCandy(CandyStorage db, string newCandyName, string newCandyFlavor, string newCandyManufacturer, string newCandyQuantity, int userId)
+        {
+            for (int i = 0; i < int.Parse(newCandyQuantity); i++)
+            {
+                var newCandy = new Candy(newCandyName, newCandyFlavor, DateTime.Now, newCandyManufacturer, userId);
+                var savedCandy = db.SaveNewCandy(newCandy);
+            }
+            
+            Console.WriteLine($"You now you own {newCandyQuantity} piece(s) of {newCandyName} candy!");
+        }
+
+        private static void EatCandy(CandyStorage db)
+        {
+            throw new NotImplementedException();
+        }
 
         public static void TradeCandy(CandyStorage db)
         {
             throw new NotImplementedException();
         }
-	}
+    }
 }

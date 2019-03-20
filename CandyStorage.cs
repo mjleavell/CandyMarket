@@ -14,7 +14,8 @@ namespace candy_market
 
         internal Candy SaveNewCandy(Candy newCandy)
         {
-            throw new NotImplementedException();
+            _myCandy.Add(newCandy);
+            return newCandy;
         }
     }
 }
