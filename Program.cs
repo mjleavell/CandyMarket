@@ -58,6 +58,7 @@ namespace candy_market
                     .AddMenuText($"Welcome {activeUserName.Name}!!")
                     .AddMenuOption("Did you just get some new candy? Add it here.")
                     .AddMenuOption("Do you want to eat some candy? Take it here.")
+                    .AddMenuOption("Do you want to trade some candy?  Trade it here.")
                     .AddMenuText("Press Esc to exit.");
 			Console.Write(mainMenu.GetFullMenu());
 			var userOption = Console.ReadKey();
