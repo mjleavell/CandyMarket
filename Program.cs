@@ -1,80 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace candy_market
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-			var db = SetupNewApp();
-            //var flavorsArray = Enum.GetNames(typeof(FlavorCategory));
-            
-            // Create our users for the system
-            var candyUsers = new List<Users>
+    class Program
+    {
+        // Create our users for the system
+        private static List<Users> candyUsers = new List<Users>()
             {
                 new Users(1, "Maggie"),
                 new Users(2, "Colin"),
                 new Users(3, "Tim"),
                 new Users(4, "Marco")
             };
-            
-			var exit = false;
-			while (!exit)
-			{
-				var userInput = MainMenu();
 
-                //var temp = TakeActions(db, userInput);
+        static void Main(string[] args)
+        {
+            var db = SetupNewApp();
 
-                exit = TakeActions(db, userInput);
-			}
-		}
+            var exit = false;
+            while (!exit)
+            {
+                var userMenuInput = UserMenu();
+                var user = GetUser(userMenuInput);
+                var userInput = MainMenu(user);
+                exit = TakeActions(db, userInput, user.Id);
+            }
+        }
 
-		internal static CandyStorage SetupNewApp()
-		{
-			Console.Title = "Cross Confectioneries Incorporated";
-			Console.BackgroundColor = ConsoleColor.White;
-			Console.ForegroundColor = ConsoleColor.Black;
+        internal static CandyStorage SetupNewApp()
+        {
+            Console.Title = "Cross Confectioneries Incorporated";
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
 
-			var db = new CandyStorage();
+            var db = new CandyStorage();
 
-			return db;
-		}
+            return db;
+        }
 
-		internal static ConsoleKeyInfo MainMenu()
-		{
-			View mainMenu = new View()
-					.AddMenuOption("Did you just get some new candy? Add it here.")
-					.AddMenuOption("Do you want to eat some candy? Take it here.")
-                    .AddMenuOption ("Do you want to trade some candy?  Trade it here.")
-					.AddMenuText("Press Esc to exit.");
-			Console.Write(mainMenu.GetFullMenu());
-			var userOption = Console.ReadKey();
-			return userOption;
-		}
+        // displays user menu
+        internal static ConsoleKeyInfo UserMenu()
+        {
+            View userMenu = new View()
+                    .AddMenuText("Please select a user from the list below")
+                    .AddMenuOptions(candyUsers.Select(u => u.Name).ToList())
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(userMenu.GetFullMenu());
+            var selectedUser = Console.ReadKey();
+            return selectedUser;
+        }
 
-		private static bool TakeActions(CandyStorage db, ConsoleKeyInfo userInput)
-		{
-			Console.Write(Environment.NewLine);
+        internal static ConsoleKeyInfo MainMenu(Users activeUserName)
+        {
+            View mainMenu = new View()
+                    .AddMenuText($"Welcome {activeUserName.Name}!!")
+                    .AddMenuOption("Did you just get some new candy? Add it here.")
+                    .AddMenuOption("Do you want to eat some candy? Take it here.")
+                    .AddMenuOption("Do you want to trade some candy?  Trade it here.")
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(mainMenu.GetFullMenu());
+            var userOption = Console.ReadKey();
+            return userOption;
+        }
 
-			if (userInput.Key == ConsoleKey.Escape)
-				return true;
+        private static bool TakeActions(CandyStorage db, ConsoleKeyInfo userInput, int userId)
+        {
+            Console.Write(Environment.NewLine);
 
-			var selection = userInput.KeyChar.ToString();
-			switch (selection)
-			{
-				case "1":
-                    AddCandyMenu(db, 1);
+            if (userInput.Key == ConsoleKey.Escape)
+                return true;
+
+            var selection = userInput.KeyChar.ToString();
+
+            switch (selection)
+            {
+                case "1":
+                    AddCandyMenu(db, userId);
                     //AddNewCandy(db);
-					break;
-				case "2": EatCandy(db);
-					break;
-                case "3": TradeCandy(db);
                     break;
-				default: return true;
-			}
-			return true;
-		}
+                case "2":
+                    EatCandy(db);
+                    break;
+                case "3":
+                    TradeCandy(db);
+                    break;
+                default: return true;
+            }
+            return false;
+        }
+
+        // returns the name and id of the current user
+        internal static Users GetUser(ConsoleKeyInfo selectedUser)
+        {
+            var userInput = selectedUser.KeyChar.ToString();
+            var userIndex = int.Parse(userInput);
+            var user = candyUsers[userIndex - 1];
+            return user;
+        }
 
         private static void AddCandyMenu(CandyStorage db, int userId)
         {
@@ -103,27 +127,29 @@ namespace candy_market
             Console.Write(addCandyMenuQuantity.GetFullMenu());
             var newCandyQuantity = Console.ReadLine();
 
-            AddNewCandy(db, newCandyName, newCandyFlavor, newCandyManufacturer, newCandyQuantity);
-            //return newCandy;
+            AddNewCandy(db, newCandyName, newCandyFlavor, newCandyManufacturer, newCandyQuantity, userId);
         }
 
-        internal static void AddNewCandy(CandyStorage db, string newCandyName, string newCandyFlavor, string newCandyManufacturer, string newCandyQuantity )
-		{
-            var newCandy = new Candy(newCandyName, newCandyFlavor, DateTime.Now, newCandyManufacturer);
-           
 
-			var savedCandy = db.SaveNewCandy(newCandy);
-			Console.WriteLine($"Now you own the candy {savedCandy.Name}");
-		}
+        internal static void AddNewCandy(CandyStorage db, string newCandyName, string newCandyFlavor, string newCandyManufacturer, string newCandyQuantity, int userId)
+        {
+            for (int i = 0; i < int.Parse(newCandyQuantity); i++)
+            {
+                var newCandy = new Candy(newCandyName, newCandyFlavor, DateTime.Now, newCandyManufacturer, userId);
+                var savedCandy = db.SaveNewCandy(newCandy);
+            }
+            
+            Console.WriteLine($"You now you own {newCandyQuantity} piece(s) of {newCandyName} candy!");
+        }
 
-		private static void EatCandy(CandyStorage db)
-		{
-			throw new NotImplementedException();
-		}
+        private static void EatCandy(CandyStorage db)
+        {
+            throw new NotImplementedException();
+        }
 
         public static void TradeCandy(CandyStorage db)
         {
             throw new NotImplementedException();
         }
-	}
+    }
 }
