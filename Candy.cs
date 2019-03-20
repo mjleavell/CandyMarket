@@ -9,7 +9,6 @@ namespace candy_market
         public DateTime DateReceived { get; set; }
         public bool isEaten { get; set; }
         public string Manufacturer { get; set; }
-
         public Candy(string name, string flavor, DateTime createdTime, string manufacturer)
         {
             Name = name;
