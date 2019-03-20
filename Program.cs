@@ -8,6 +8,7 @@ namespace candy_market
 		static void Main(string[] args)
 		{
 			var db = SetupNewApp();
+            //var flavorsArray = Enum.GetNames(typeof(FlavorCategory));
             
             // Create our users for the system
             var candyUsers = new List<Users>
@@ -17,12 +18,15 @@ namespace candy_market
                 new Users(3, "Tim"),
                 new Users(4, "Marco")
             };
-
+            
 			var exit = false;
 			while (!exit)
 			{
 				var userInput = MainMenu();
-				exit = TakeActions(db, userInput);
+
+                //var temp = TakeActions(db, userInput);
+
+                exit = TakeActions(db, userInput);
 			}
 		}
 
@@ -60,8 +64,8 @@ namespace candy_market
 			switch (selection)
 			{
 				case "1":
-                    var userNewCandy = AddCandyMenu(1, "Vanilla");
-                    AddNewCandy(db);
+                    AddCandyMenu(db, 1);
+                    //AddNewCandy(db);
 					break;
 				case "2": EatCandy(db);
 					break;
@@ -72,25 +76,41 @@ namespace candy_market
 			return true;
 		}
 
-        private static string AddCandyMenu(int userId, string flavorCategory)
+        private static void AddCandyMenu(CandyStorage db, int userId)
         {
-            View addCandyMenu = new View()
-                    .AddMenuOption("Please provide the following as a Comma Seperated List:")
-                    .AddMenuText($"\nName, [{flavorCategory}], Quantity\n")
-                    //.AddMenuText($"[{flavorCategory}]")
-                    //.AddMenuText("Quantity")
+            //var flavorCategoryString = string.Join(",", flavorCategory);
+            View addCandyMenuName = new View()
+                    .AddMenuOption("Please provide the candy name:")
                     .AddMenuText("Press Esc to exit.");
-            Console.Write(addCandyMenu.GetFullMenu());
-            var newCandy = Console.ReadLine();
-            return newCandy;
+            Console.Write(addCandyMenuName.GetFullMenu());
+            var newCandyName = Console.ReadLine();
+
+            View addCandyMenuFlavor = new View()
+                    .AddMenuOption("Please provide a flavor or type:")
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(addCandyMenuFlavor.GetFullMenu());
+            var newCandyFlavor = Console.ReadLine();
+
+            View addCandyMenuManufacturer = new View()
+                   .AddMenuOption("Please provide the manufacturer:")
+                   .AddMenuText("Press Esc to exit.");
+            Console.Write(addCandyMenuManufacturer.GetFullMenu());
+            var newCandyManufacturer = Console.ReadLine();
+
+            View addCandyMenuQuantity = new View()
+                    .AddMenuOption("Please provide the Quantity you want to add:")
+                    .AddMenuText("Press Esc to exit.");
+            Console.Write(addCandyMenuQuantity.GetFullMenu());
+            var newCandyQuantity = Console.ReadLine();
+
+            AddNewCandy(db, newCandyName, newCandyFlavor, newCandyManufacturer, newCandyQuantity);
+            //return newCandy;
         }
 
-		internal static void AddNewCandy(CandyStorage db)
+        internal static void AddNewCandy(CandyStorage db, string newCandyName, string newCandyFlavor, string newCandyManufacturer, string newCandyQuantity )
 		{
-			var newCandy = new Candy
-			{
-				Name = "Whatchamacallit"
-			};
+            var newCandy = new Candy(newCandyName, newCandyFlavor, DateTime.Now, newCandyManufacturer);
+           
 
 			var savedCandy = db.SaveNewCandy(newCandy);
 			Console.WriteLine($"Now you own the candy {savedCandy.Name}");
