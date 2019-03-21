@@ -1,4 +1,5 @@
-﻿using System;
+﻿using candy_market.SeedData;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,6 +19,7 @@ namespace candy_market
         static void Main(string[] args)
         {
             var db = SetupNewApp();
+            DefaultCandy.SeedCandy();
 
             var exit = false;
             while (!exit)
