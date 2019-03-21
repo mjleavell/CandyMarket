@@ -95,6 +95,16 @@ namespace candy_market
         internal static Users GetUser(ConsoleKeyInfo selectedUser)
         {
             var userInput = selectedUser.KeyChar.ToString();
+            try
+            {
+                var index = int.Parse(userInput);
+                var range = Enumerable.Range(1, 3);
+                range.Contains<int>(index);
+            }
+            catch
+            {
+                Console.WriteLine("\nPlease enter a valid user");
+            }
             var userIndex = int.Parse(userInput);
             var user = candyUsers[userIndex - 1];
             return user;
@@ -102,7 +112,6 @@ namespace candy_market
 
         private static void AddCandyMenu(CandyStorage db, int userId)
         {
-            //var flavorCategoryString = string.Join(",", flavorCategory);
             View addCandyMenuName = new View()
                     .AddMenuOption("Please provide the candy name:")
                     .AddMenuText("Press Esc to exit.");
