@@ -81,7 +81,7 @@ namespace candy_market
                     //AddNewCandy(db);
                     break;
                 case "2":
-                    EatCandy(db);
+                    EatCandyMenu(db, userId);
                     break;
                 case "3":
                     TradeCandy(db);
@@ -142,9 +142,15 @@ namespace candy_market
             Console.WriteLine($"You now you own {newCandyQuantity} piece(s) of {newCandyName} candy!");
         }
 
-        private static void EatCandy(CandyStorage db)
+        private static void EatCandyMenu(CandyStorage db, int userId)
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
+           View EatCandyMenuNow = new View()
+            .AddMenuOption("Eat some candy from your collection?")
+            .AddMenuOption("Eat a random candy?")
+            .AddMenuText("Press Esc to exit.");
+            Console.Write(EatCandyMenuNow.GetFullMenu());
+            var candyTheyWantToEat = Console.ReadLine();
         }
 
         public static void TradeCandy(CandyStorage db)
