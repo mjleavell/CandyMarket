@@ -25,7 +25,7 @@ namespace candy_market
                 var userMenuInput = UserMenu();
                 var user = GetUser(userMenuInput);
                 var userInput = MainMenu(user);
-                exit = TakeActions(db, userInput, user.Id);
+                exit = TakeActions(db, userInput, user.Id, user);
             }
         }
 
@@ -65,7 +65,7 @@ namespace candy_market
             return userOption;
         }
 
-        private static bool TakeActions(CandyStorage db, ConsoleKeyInfo userInput, int userId)
+        private static bool TakeActions(CandyStorage db, ConsoleKeyInfo userInput, int userId, Users user)
         {
             Console.Write(Environment.NewLine);
 
@@ -84,7 +84,7 @@ namespace candy_market
                     EatCandy(db);
                     break;
                 case "3":
-                    TradeCandy(db);
+                    TradeCandyMenu(db, userId, user);
                     break;
                 default: return true;
             }
@@ -102,7 +102,6 @@ namespace candy_market
 
         private static void AddCandyMenu(CandyStorage db, int userId)
         {
-            //var flavorCategoryString = string.Join(",", flavorCategory);
             View addCandyMenuName = new View()
                     .AddMenuOption("Please provide the candy name:")
                     .AddMenuText("Press Esc to exit.");
@@ -140,6 +139,7 @@ namespace candy_market
             }
             
             Console.WriteLine($"You now you own {newCandyQuantity} piece(s) of {newCandyName} candy!");
+            Console.ReadLine();
         }
 
         private static void EatCandy(CandyStorage db)
@@ -147,9 +147,17 @@ namespace candy_market
             throw new NotImplementedException();
         }
 
-        public static void TradeCandy(CandyStorage db)
+        public static void TradeCandyMenu(CandyStorage db, int userId, Users user)
         {
-            throw new NotImplementedException();
+            View candyMenuTradeWho = new View()
+                    .AddMenuOption($"Hello {user.Name}. Who would you like to trade with?");
+            Console.Write(candyMenuTradeWho.GetFullMenu());
+            var CandyTradeWho = Console.ReadLine();
+
+            View candyMenuTradeWhat = new View()
+                   .AddMenuOption("What would you like to trade?");
+            Console.Write(candyMenuTradeWhat.GetFullMenu());
+            var CandyTradeWhat = Console.ReadLine();
         }
     }
 }
