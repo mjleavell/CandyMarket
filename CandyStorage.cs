@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace candy_market
 {
@@ -16,6 +17,12 @@ namespace candy_market
         {
             _myCandy.Add(newCandy);
             return newCandy;
+        }
+
+        internal List<Candy> GetCandyByUserId(int userId)
+        {
+            var userCandy = _myCandy.Where(candy => candy.UserId == userId).ToList();
+            return userCandy;
         }
     }
 }

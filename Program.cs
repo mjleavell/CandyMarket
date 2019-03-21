@@ -148,11 +148,31 @@ namespace candy_market
         {
            // throw new NotImplementedException();
            View EatCandyMenuNow = new View()
-            .AddMenuOption("Eat some candy from your collection?")
-            .AddMenuOption("Eat a random candy?")
+            .AddMenuOption("Eat some candy from your collection, right?")
+            // .AddMenuOption("Eat a random candy?")
             .AddMenuText("Press Esc to exit.");
             Console.Write(EatCandyMenuNow.GetFullMenu());
-            var candyTheyWantToEat = Console.ReadLine();
+            // var selection = Console.ReadLine();
+            // int selection;
+            var selection = Console.ReadKey().KeyChar.ToString();
+            var shouldbeanumber = int.Parse(selection);
+            if (shouldbeanumber == 1) {
+                EatCandy(db, userId);
+            } else {
+                Console.WriteLine("Does something work?");
+            }
+        }
+
+        internal static void EatCandy(CandyStorage db, int userId)
+        {
+            var myCandy = db.GetCandyByUserId(userId);
+            var aname = myCandy.Select(candy => candy.Name).ToList();
+            var makingitastring = string.Join(", ", aname);
+            View EatTheCandyDude = new View()
+                .AddMenuText("Which candy do you want to eat?")
+                .AddMenuText(makingitastring);
+                Console.WriteLine(EatTheCandyDude.GetFullMenu());
+                Console.ReadLine();
         }
 
         public static void TradeCandy(CandyStorage db)
