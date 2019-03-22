@@ -173,6 +173,8 @@ namespace candy_market
                 .AddMenuText(makingitastring);
                 Console.WriteLine(EatTheCandyDude.GetFullMenu());
                 Console.ReadLine();
+            // Whichever candy they choose, I need to change isEaten bool to true
+            // 
         }
 
         public static void TradeCandy(CandyStorage db)

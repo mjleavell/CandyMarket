@@ -21,7 +21,9 @@ namespace candy_market
 
         internal List<Candy> GetCandyByUserId(int userId)
         {
-            var userCandy = _myCandy.Where(candy => candy.UserId == userId).ToList();
+            var userCandy = _myCandy
+            .Where(candy => candy.UserId == userId && candy.isEaten == false)
+            .ToList();
             return userCandy;
         }
     }
