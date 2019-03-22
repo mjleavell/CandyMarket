@@ -26,5 +26,24 @@ namespace candy_market
             .ToList();
             return userCandy;
         }
+
+        internal Candy UpdateCandy(Candy updatedCandy)
+        {
+            var candyToUpdate = _myCandy
+            .Where(x => x.Id == updatedCandy.Id)
+            .FirstOrDefault();
+
+            if (candyToUpdate != null)
+            {
+                var oldIndex = _myCandy
+                    .FindIndex(x => x.Id == updatedCandy.Id);
+                _myCandy.RemoveAt(oldIndex);
+
+                _myCandy.Add(updatedCandy);
+                return updatedCandy;
+            } else {
+                throw new InvalidOperationException($"No candy found with id {updatedCandy.Id}");
+            }
+        }
     }
 }

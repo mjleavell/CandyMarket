@@ -168,13 +168,34 @@ namespace candy_market
             var myCandy = db.GetCandyByUserId(userId);
             var aname = myCandy.Select(candy => candy.Name).ToList();
             var makingitastring = string.Join(", ", aname);
+
             View EatTheCandyDude = new View()
                 .AddMenuText("Which candy do you want to eat?")
-                .AddMenuText(makingitastring);
+                .AddMenuOption(makingitastring);
                 Console.WriteLine(EatTheCandyDude.GetFullMenu());
-                Console.ReadLine();
-            // Whichever candy they choose, I need to change isEaten bool to true
-            // 
+                var candySelected = Console.ReadLine();
+                // Console.WriteLine("Yummy! Gee Wiz that was great! Lets do it again");
+                // Console.ReadLine();
+            EatingDaCandy(db, candySelected, userId);
+        }
+
+        private static void EatingDaCandy(CandyStorage db, string selectedCandy, int userId)
+        {
+            var usersCandy = db.GetCandyByUserId(userId);
+            var candyList = usersCandy.FirstOrDefault(x => x.Name == selectedCandy);
+
+            if (candyList != null) 
+            {
+                var candyToUpdate = usersCandy
+                .Where(x => x.Name == selectedCandy)
+                .OrderBy(x => x.DateReceived)
+                .First();
+                candyToUpdate.isEaten = true;
+                db.UpdateCandy(candyToUpdate);
+
+            } else {
+                EatCandyMenu(db, userId);
+            }
         }
 
         public static void TradeCandy(CandyStorage db)
