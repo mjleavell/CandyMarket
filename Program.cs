@@ -99,8 +99,10 @@ namespace candy_market
             try
             {
                 var index = int.Parse(userInput);
-                var range = Enumerable.Range(1, 3);
-                range.Contains<int>(index);
+                if(index >= 1 || index <= 4)
+                {
+                    
+                };
             }
             catch
             {
