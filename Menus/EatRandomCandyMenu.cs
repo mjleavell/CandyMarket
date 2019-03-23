@@ -21,7 +21,7 @@ namespace candy_market.Menus
 
             View addRandomCandyFlavors = new View()
 
-                .AddMenuText(error ? "Could not locate that Flavor, Try again:" : "Please type the Flavor of candy you wish to eat from the list:")
+                .AddMenuText(error ? "Could not locate that Flavor, Try again:" : "Please select the Flavor of candy you wish to eat from the list:")
                 .AddMenuOptions(flavorString)
                 .AddMenuText("Press Esc to return to the Main Menu");
             Console.Write(addRandomCandyFlavors.GetFullMenu());
