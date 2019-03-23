@@ -160,6 +160,15 @@ namespace candy_market
                    .AddMenuOption("What would you like to trade?");
             Console.Write(candyMenuTradeWhat.GetFullMenu());
             var CandyTradeWhat = Console.ReadLine();
+
+            TradeCandy(db, userId, CandyTradeWho, CandyTradeWhat);
+        }
+
+        internal static void TradeCandy(CandyStorage db, int userId, string CandyTradeWho, string CandyTradeWhat)
+        {
+            Console.WriteLine(db.GetCandyTypes());
+            Console.ReadLine();
+
         }
     }
 }
