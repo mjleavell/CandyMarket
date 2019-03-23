@@ -23,12 +23,21 @@ namespace candy_market
             DefaultCandy.SeedCandy();
 
             var exit = false;
+            var userSelected = false;
+
             while (!exit)
             {
-                var userMenuInput = UserMenu();
-                var user = GetUser(userMenuInput);
+                //if (!userSelected)
+                var userMenuInput = DisplayUserMenu.UserMenu(candyUsers);
+
+                var validUserIndex = DisplayUserMenu.GetValidUser(userMenuInput, candyUsers);
+                if (validUserIndex == -1)
+                {
+                    continue;
+                }
+                var user = DisplayUserMenu.GetUser(validUserIndex, candyUsers);
                 var userInput = MainMenu(user);
-                exit = TakeActions(db, userInput, user.Id);
+                exit = TakeActions(db, userInput, user.Id);            
             }
         }
 
@@ -41,18 +50,6 @@ namespace candy_market
             var db = new CandyStorage();
 
             return db;
-        }
-
-        // displays user menu
-        internal static ConsoleKeyInfo UserMenu()
-        {
-            View userMenu = new View()
-                    .AddMenuText("Please select a user from the list below")
-                    .AddMenuOptions(candyUsers.Select(u => u.Name).ToList())
-                    .AddMenuText("Press Esc to exit.");
-            Console.Write(userMenu.GetFullMenu());
-            var selectedUser = Console.ReadKey();
-            return selectedUser;
         }
 
         internal static ConsoleKeyInfo MainMenu(Users activeUserName)
@@ -101,35 +98,7 @@ namespace candy_market
             }
             return false;
         }
-
-        // returns the name and id of the current user
-        internal static Users GetUser(ConsoleKeyInfo selectedUser)
-        {
-            var userInput = selectedUser.KeyChar.ToString();
-            try
-            {
-                var index = int.Parse(userInput);
-                //var numInRange = Enumerable.Range(1, 4).Contains(index);
-                if (!(index < 1) && (index > 4))
-                {
-                    Console.WriteLine("\nPlease enter a valid user");
-                }
-                UserMenu();
-            }
-            //catch (ArgumentOutOfRangeException)
-            //{
-            //    Console.WriteLine("\nPlease enter a valid user");
-            //}
-            catch
-            {
-                Console.WriteLine("\nPlease enter a valid user");
-                UserMenu();
-            }
-            var userIndex = int.Parse(userInput);
-            var user = candyUsers[userIndex - 1];
-            return user;
-        }
-
+        
         private static void AddCandyMenu(CandyStorage db, int userId)
         {
             View addCandyMenuName = new View()
