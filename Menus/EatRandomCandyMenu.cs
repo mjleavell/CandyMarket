@@ -113,6 +113,9 @@ namespace candy_market.Menus
         private static void UpdateRandomCandy(CandyStorage db, Candy candyToUpdate)
         {
             var UpdatedCandy = db.UpdateCandy(candyToUpdate);
+            Console.WriteLine($"\nYou just ate a {UpdatedCandy.Name} that was recieved on {UpdatedCandy.DateReceived}");
+            Console.WriteLine("\nPress the Enter key to continue.");
+            Console.ReadLine();
         }
     }
 }
