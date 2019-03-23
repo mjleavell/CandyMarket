@@ -1,11 +1,12 @@
-﻿using candy_market.SeedData;
+﻿using candy_market.Menus;
+using candy_market.SeedData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace candy_market
 {
-    class Program
+    internal class Program
     {
         // Create our users for the system
         private static List<Users> candyUsers = new List<Users>()
@@ -16,7 +17,7 @@ namespace candy_market
                 new Users(4, "Marco")
             };
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var db = SetupNewApp();
             DefaultCandy.SeedCandy();
@@ -34,8 +35,8 @@ namespace candy_market
         internal static CandyStorage SetupNewApp()
         {
             Console.Title = "Cross Confectioneries Incorporated";
-            Console.BackgroundColor = ConsoleColor.White;
-            Console.ForegroundColor = ConsoleColor.Black;
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.Cyan;
 
             var db = new CandyStorage();
 
@@ -58,9 +59,10 @@ namespace candy_market
         {
             View mainMenu = new View()
                     .AddMenuText($"Welcome {activeUserName.Name}!!")
-                    .AddMenuOption("Did you just get some new candy? Add it here.")
-                    .AddMenuOption("Do you want to eat some candy? Take it here.")
-                    .AddMenuOption("Do you want to trade some candy?  Trade it here.")
+                    .AddMenuOption("[ADD]    - Did you just get some new candy? Add it here.")
+                    .AddMenuOption("[EAT]    - Do you want to eat some candy? Take it here.")
+                    .AddMenuOption("[RANDOM] - Do you want to eat a random piece of candy? Pick it here.")
+                    .AddMenuOption("[TRADE]  - Do you want to trade some candy?  Trade it here.")
                     .AddMenuText("Press Esc to exit.");
             Console.Write(mainMenu.GetFullMenu());
             var userOption = Console.ReadKey();
@@ -81,12 +83,20 @@ namespace candy_market
                 case "1":
                     AddCandyMenu(db, userId);
                     break;
+
                 case "2":
                     EatCandy(db);
                     break;
+
                 case "3":
+                    EatRandomCandyMenu.AddRandomCandyMenu(db, userId);
+                    //EatRandomCandy(db);
+                    break;
+
+                case "4":
                     TradeCandy(db);
                     break;
+
                 default: return true;
             }
             return false;
@@ -149,7 +159,6 @@ namespace candy_market
             AddNewCandy(db, newCandyName, newCandyFlavor, newCandyManufacturer, newCandyQuantity, userId);
         }
 
-
         internal static void AddNewCandy(CandyStorage db, string newCandyName, string newCandyFlavor, string newCandyManufacturer, string newCandyQuantity, int userId)
         {
             for (int i = 0; i < int.Parse(newCandyQuantity); i++)
@@ -157,7 +166,7 @@ namespace candy_market
                 var newCandy = new Candy(newCandyName, newCandyFlavor, DateTime.Now, newCandyManufacturer, userId);
                 var savedCandy = db.SaveNewCandy(newCandy);
             }
-            
+
             Console.WriteLine($"You now you own {newCandyQuantity} piece(s) of {newCandyName} candy!");
         }
 
