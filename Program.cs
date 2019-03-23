@@ -99,10 +99,11 @@ namespace candy_market
             try
             {
                 var index = int.Parse(userInput);
-                if(index >= 1 || index <= 4)
-                {
-                    
-                };
+                //if(index >= 1 || index <= 4)
+                //{
+
+                //};
+              
             }
             catch
             {
