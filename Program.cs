@@ -86,7 +86,8 @@ namespace candy_market
                     break;
 
                 case "2":
-                    EatCandyMenu(db, userId);
+                    // EatCandyMenu(db, userId);
+                    EatCandyMenu.AddEatCandyMenu(db, userId);
                     break;
 
                 case "3":
@@ -151,89 +152,6 @@ namespace candy_market
             }
 
             Console.WriteLine($"You now you own {newCandyQuantity} piece(s) of {newCandyName} candy!");
-        }
-
-        private static void EatCandyMenu(CandyStorage db, int userId)
-        {
-           // throw new NotImplementedException();
-           View EatCandyMenuNow = new View()
-            .AddMenuOption("Eat some candy from your collection, right?")
-            // .AddMenuOption("Eat a random candy?")
-            .AddMenuText("Press Esc to exit.");
-            Console.Write(EatCandyMenuNow.GetFullMenu());
-            // var selection = Console.ReadLine();
-            // int selection;
-            var selection = Console.ReadKey().KeyChar.ToString();
-            var shouldbeanumber = int.Parse(selection);
-            if (shouldbeanumber == 1) {
-                EatCandy(db, userId);
-            } else {
-                Console.WriteLine("Does something work?");
-            }
-        }
-
-        internal static void EatCandy(CandyStorage db, int userId)
-        {
-            var myCandy = db.GetCandyByUserId(userId);
-            var aname = myCandy.Select(candy => candy.Name).ToList();
-            // After this he's just returning this to the EatCandy function
-
-            // var makingitastring = string.Join(", ", aname);
-
-            View EatTheCandyDude = new View()
-                .AddMenuText("Which candy do you want to eat?")
-                .AddMenuOptions(aname)
-                .AddMenuText("Press Esc to return to the Main Menu");
-                Console.WriteLine(EatTheCandyDude.GetFullMenu());
-                var candySelected = Console.ReadKey();
-                var userChosenCandy = getCandyFromMenu(candySelected, aname);
-
-
-                // var candySelected = Console.ReadLine();
-                // Console.WriteLine("Yummy! Gee Wiz that was great! Lets do it again");
-                // Console.ReadLine();
-            EatingDaCandy(db, userChosenCandy, userId);
-        }
-
-        private static string getCandyFromMenu(ConsoleKeyInfo candySelected, List<string> aname)
-        {
-            try {
-                var selectedMenuCandy = int.Parse(candySelected.KeyChar.ToString());
-                return aname[selectedMenuCandy - 1];
-
-            }
-            catch {
-                return "Error";
-            }
-        }
-
-
-
-        private static void EatingDaCandy(CandyStorage db, string selectedCandy, int userId)
-        {
-            var usersCandy = db.GetCandyByUserId(userId);
-            var candyList = usersCandy.FirstOrDefault(x => x.Name == selectedCandy);
-
-            if (candyList != null) 
-            {
-                var candyToUpdate = usersCandy
-                .Where(x => x.Name == selectedCandy)
-                .OrderBy(x => x.DateReceived)
-                .First();
-                candyToUpdate.isEaten = true;
-                updateEatenCandy(db, candyToUpdate);
-
-            } else {
-                EatCandyMenu(db, userId);
-            }
-        }
-
-        private static void updateEatenCandy(CandyStorage db, Candy candyToUpdate)
-        {
-            var candyTheyAte = db.UpdateCandy(candyToUpdate);
-            Console.WriteLine($"\nYou just ate a {candyTheyAte.Name} that was recieved on {candyTheyAte.DateReceived}, Gee wiz! That was yummy!!!");
-            Console.WriteLine("\nPress the Enter key to continue.");
-            Console.ReadLine();
         }
         public static void TradeCandy(CandyStorage db)
         {
