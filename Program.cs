@@ -176,17 +176,38 @@ namespace candy_market
         {
             var myCandy = db.GetCandyByUserId(userId);
             var aname = myCandy.Select(candy => candy.Name).ToList();
-            var makingitastring = string.Join(", ", aname);
+            // After this he's just returning this to the EatCandy function
+
+            // var makingitastring = string.Join(", ", aname);
 
             View EatTheCandyDude = new View()
                 .AddMenuText("Which candy do you want to eat?")
-                .AddMenuOption(makingitastring);
+                .AddMenuOptions(aname)
+                .AddMenuText("Press Esc to return to the Main Menu");
                 Console.WriteLine(EatTheCandyDude.GetFullMenu());
-                var candySelected = Console.ReadLine();
+                var candySelected = Console.ReadKey();
+                var userChosenCandy = getCandyFromMenu(candySelected, aname);
+
+
+                // var candySelected = Console.ReadLine();
                 // Console.WriteLine("Yummy! Gee Wiz that was great! Lets do it again");
                 // Console.ReadLine();
-            EatingDaCandy(db, candySelected, userId);
+            EatingDaCandy(db, userChosenCandy, userId);
         }
+
+        private static string getCandyFromMenu(ConsoleKeyInfo candySelected, List<string> aname)
+        {
+            try {
+                var selectedMenuCandy = int.Parse(candySelected.KeyChar.ToString());
+                return aname[selectedMenuCandy - 1];
+
+            }
+            catch {
+                return "Error";
+            }
+        }
+
+
 
         private static void EatingDaCandy(CandyStorage db, string selectedCandy, int userId)
         {
@@ -200,13 +221,20 @@ namespace candy_market
                 .OrderBy(x => x.DateReceived)
                 .First();
                 candyToUpdate.isEaten = true;
-                db.UpdateCandy(candyToUpdate);
+                updateEatenCandy(db, candyToUpdate);
 
             } else {
                 EatCandyMenu(db, userId);
             }
         }
 
+        private static void updateEatenCandy(CandyStorage db, Candy candyToUpdate)
+        {
+            var candyTheyAte = db.UpdateCandy(candyToUpdate);
+            Console.WriteLine($"\nYou just ate a {candyTheyAte.Name} that was recieved on {candyTheyAte.DateReceived}, Gee wiz! That was yummy!!!");
+            Console.WriteLine("\nPress the Enter key to continue.");
+            Console.ReadLine();
+        }
         public static void TradeCandy(CandyStorage db)
         {
             throw new NotImplementedException();
