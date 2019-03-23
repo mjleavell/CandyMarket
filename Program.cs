@@ -37,6 +37,10 @@ namespace candy_market
                     {
                         continue;
                     }
+                    if (validUserIndex == -2)
+                    {
+                        break;
+                    }
                     user = DisplayUserMenu.GetUser(validUserIndex, candyUsers);
                     userSelected = true;
                 }  

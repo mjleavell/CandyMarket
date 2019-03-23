@@ -8,7 +8,6 @@ namespace candy_market.Menus
     class DisplayUserMenu
     {
         static bool error = false;
-        static bool isValid = false;
 
         // displays user menu
         public static ConsoleKeyInfo UserMenu(List<Users> candyUsers)
@@ -26,6 +25,12 @@ namespace candy_market.Menus
         public static int GetValidUser(ConsoleKeyInfo selectedUser, List<Users> candyUsers)
         {
             var userInput = selectedUser.KeyChar.ToString();
+
+            // if user clicks escape
+            if (userInput == "\u001b")
+            {
+                return -2;
+            }
             try
             {
                 var userIndex = int.Parse(userInput);
