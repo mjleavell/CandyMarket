@@ -17,5 +17,6 @@ namespace candy_market
             _myCandy.Add(newCandy);
             return newCandy;
         }
+
     }
 }
