@@ -99,15 +99,21 @@ namespace candy_market
             try
             {
                 var index = int.Parse(userInput);
-                //if(index >= 1 || index <= 4)
-                //{
-
-                //};
-              
+                //var numInRange = Enumerable.Range(1, 4).Contains(index);
+                if (!(index < 1) && (index > 4))
+                {
+                    Console.WriteLine("\nPlease enter a valid user");
+                }
+                UserMenu();
             }
+            //catch (ArgumentOutOfRangeException)
+            //{
+            //    Console.WriteLine("\nPlease enter a valid user");
+            //}
             catch
             {
                 Console.WriteLine("\nPlease enter a valid user");
+                UserMenu();
             }
             var userIndex = int.Parse(userInput);
             var user = candyUsers[userIndex - 1];
