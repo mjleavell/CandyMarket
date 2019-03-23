@@ -24,20 +24,25 @@ namespace candy_market
 
             var exit = false;
             var userSelected = false;
+            var user = new Users();
 
             while (!exit)
             {
-                //if (!userSelected)
-                var userMenuInput = DisplayUserMenu.UserMenu(candyUsers);
-
-                var validUserIndex = DisplayUserMenu.GetValidUser(userMenuInput, candyUsers);
-                if (validUserIndex == -1)
+                if (!userSelected)
                 {
-                    continue;
-                }
-                var user = DisplayUserMenu.GetUser(validUserIndex, candyUsers);
-                var userInput = MainMenu(user);
-                exit = TakeActions(db, userInput, user.Id);            
+                    var userMenuInput = DisplayUserMenu.UserMenu(candyUsers);
+
+                    var validUserIndex = DisplayUserMenu.GetValidUser(userMenuInput, candyUsers);
+                    if (validUserIndex == -1)
+                    {
+                        continue;
+                    }
+                    user = DisplayUserMenu.GetUser(validUserIndex, candyUsers);
+                    userSelected = true;
+                }  
+                    var userInput = MainMenu(user);
+                    exit = TakeActions(db, userInput, user.Id);
+                        
             }
         }
 
