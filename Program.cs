@@ -90,7 +90,7 @@ namespace candy_market
                     break;
 
                 case "2":
-                    EatCandy(db);
+                    EatCandyMenu.AddEatCandyMenu(db, userId);
                     break;
 
                 case "3":
@@ -104,11 +104,6 @@ namespace candy_market
                 default: return true;
             }
             return false;
-        }
-
-        private static void EatCandy(CandyStorage db)
-        {
-            throw new NotImplementedException();
         }
 
         public static void TradeCandy(CandyStorage db)
