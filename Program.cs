@@ -106,15 +106,6 @@ namespace candy_market
             return false;
         }
 
-        // returns the name and id of the current user
-        internal static Users GetUser(ConsoleKeyInfo selectedUser)
-        {
-            var userInput = selectedUser.KeyChar.ToString();
-            var userIndex = int.Parse(userInput);
-            var user = candyUsers[userIndex - 1];
-            return user;
-        }
-
         private static void EatCandy(CandyStorage db)
         {
             throw new NotImplementedException();
