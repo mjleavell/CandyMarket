@@ -12,5 +12,10 @@ namespace candy_market
             Id = id;
             Name = name;
         }
+
+        public Users()
+        {
+
+        }
     }
 }
