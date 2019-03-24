@@ -23,12 +23,29 @@ namespace candy_market
             DefaultCandy.SeedCandy();
 
             var exit = false;
+            var userSelected = false;
+            var user = new Users();
+
             while (!exit)
             {
-                var userMenuInput = UserMenu();
-                var user = GetUser(userMenuInput);
+                if (!userSelected)
+                {
+                    var userMenuInput = DisplayUserMenu.UserMenu(candyUsers);
+                    var validUserIndex = DisplayUserMenu.GetValidUser(userMenuInput, candyUsers);
+                    if (validUserIndex == -1)
+                    {
+                        continue;
+                    }
+                    if (validUserIndex == -2)
+                    {
+                        break;
+                    }
+                    user = DisplayUserMenu.GetUser(validUserIndex, candyUsers);
+                    userSelected = true;
+                }
                 var userInput = MainMenu(user);
                 exit = TakeActions(db, userInput, user.Id);
+
             }
         }
 
@@ -41,18 +58,6 @@ namespace candy_market
             var db = new CandyStorage();
 
             return db;
-        }
-
-        // displays user menu
-        internal static ConsoleKeyInfo UserMenu()
-        {
-            View userMenu = new View()
-                    .AddMenuText("Please select a user from the list below")
-                    .AddMenuOptions(candyUsers.Select(u => u.Name).ToList())
-                    .AddMenuText("Press Esc to exit.");
-            Console.Write(userMenu.GetFullMenu());
-            var selectedUser = Console.ReadKey();
-            return selectedUser;
         }
 
         internal static ConsoleKeyInfo MainMenu(Users activeUserName)
@@ -82,7 +87,6 @@ namespace candy_market
             {
                 case "1":
                     AddCandyMenu.AddCandyMenus(db, userId);
-                    //AddNewCandy(db);
                     break;
 
                 case "2":
@@ -91,7 +95,6 @@ namespace candy_market
 
                 case "3":
                     EatRandomCandyMenu.AddRandomCandyMenu(db, userId);
-                    //EatRandomCandy(db);
                     break;
 
                 case "4":
@@ -101,15 +104,6 @@ namespace candy_market
                 default: return true;
             }
             return false;
-        }
-
-        // returns the name and id of the current user
-        internal static Users GetUser(ConsoleKeyInfo selectedUser)
-        {
-            var userInput = selectedUser.KeyChar.ToString();
-            var userIndex = int.Parse(userInput);
-            var user = candyUsers[userIndex - 1];
-            return user;
         }
 
         private static void EatCandy(CandyStorage db)
