@@ -90,7 +90,6 @@ namespace candy_market
                     break;
 
                 case "2":
-                    // EatCandyMenu(db, userId);
                     EatCandyMenu.AddEatCandyMenu(db, userId);
                     break;
 
