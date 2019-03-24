@@ -106,11 +106,6 @@ namespace candy_market
             return false;
         }
 
-        private static void EatCandy(CandyStorage db)
-        {
-            throw new NotImplementedException();
-        }
-
         public static void TradeCandy(CandyStorage db)
         {
             throw new NotImplementedException();

@@ -8,18 +8,27 @@ namespace candy_market.Menus
   {
     public static void AddEatCandyMenu(CandyStorage db, int userId)
     {
-           View EatCandyMenuView = new View()
-            .AddMenuOption("Just so that we're clear, you want to eat some candy from your collection, right?")
-            .AddMenuText("Press Esc to exit.");
-            Console.Write(EatCandyMenuView.GetFullMenu());
-            var userSelection = Console.ReadKey().KeyChar.ToString();
-            var userSelectionToNumber = int.Parse(userSelection);
+        var myCandy = db.GetCandyByUserId(userId);
+           if (myCandy.Count > 0) {
+
+                View EatCandyMenuView = new View()
+                .AddMenuOption("Just so that we're clear, you want to eat some candy from your collection, right?")
+                .AddMenuText("Press Esc to exit.");
+                Console.Write(EatCandyMenuView.GetFullMenu());
+                var userSelection = Console.ReadKey().KeyChar.ToString();
+                var userSelectionToNumber = int.Parse(userSelection);
+
             if (userSelectionToNumber == 1) {
                 ListingUserCandy(db, userId);
             } else {
                 Console.WriteLine("Error");
+                Console.ReadLine();
             }
-       }
+           } else {
+                    Console.WriteLine("Yikes it looks like you're out of candy!");
+                    Console.ReadLine();
+                }
+    }
         internal static void ListingUserCandy(CandyStorage db, int userId)
         {
             // Getting all of the user's candy by their ID
@@ -66,9 +75,10 @@ namespace candy_market.Menus
                 // Since our GetCandyByUserId method only returns "isEaten = false" candy
                 candyToUpdate.isEaten = true;
                 updateEatenCandy(db, candyToUpdate);
-
             } else {
-                AddEatCandyMenu(db, userId);
+                // AddEatCandyMenu(db, userId);
+                Console.WriteLine("Please choose a candy from the list! Lets try this again");
+                Console.ReadLine();
             }
         }
         private static void updateEatenCandy(CandyStorage db, Candy candyToUpdate)
