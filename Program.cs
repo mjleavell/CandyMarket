@@ -23,12 +23,33 @@ namespace candy_market
             DefaultCandy.SeedCandy();
 
             var exit = false;
+            var userSelected = false;
+            var user = new Users();
+
             while (!exit)
             {
-                var userMenuInput = UserMenu();
-                var user = GetUser(userMenuInput);
+                if (!userSelected)
+                {
+                    var userMenuInput = DisplayUserMenu.UserMenu(candyUsers);
+                    var validUserIndex = DisplayUserMenu.GetValidUser(userMenuInput, candyUsers);
+                    if (validUserIndex == -1)
+                    {
+                        continue;
+                    }
+                    if (validUserIndex == -2)
+                    {
+                        break;
+                    }
+                    user = DisplayUserMenu.GetUser(validUserIndex, candyUsers);
+                    userSelected = true;
+                }
                 var userInput = MainMenu(user);
+<<<<<<< HEAD
                 exit = TakeActions(db, userInput, user.Id, user);
+=======
+                exit = TakeActions(db, userInput, user.Id);
+
+>>>>>>> master
             }
         }
 
@@ -41,18 +62,6 @@ namespace candy_market
             var db = new CandyStorage();
 
             return db;
-        }
-
-        // displays user menu
-        internal static ConsoleKeyInfo UserMenu()
-        {
-            View userMenu = new View()
-                    .AddMenuText("Please select a user from the list below")
-                    .AddMenuOptions(candyUsers.Select(u => u.Name).ToList())
-                    .AddMenuText("Press Esc to exit.");
-            Console.Write(userMenu.GetFullMenu());
-            var selectedUser = Console.ReadKey();
-            return selectedUser;
         }
 
         internal static ConsoleKeyInfo MainMenu(Users activeUserName)
@@ -81,17 +90,15 @@ namespace candy_market
             switch (selection)
             {
                 case "1":
-                    AddCandyMenu(db, userId);
-                    //AddNewCandy(db);
+                    AddCandyMenu.AddCandyMenus(db, userId);
                     break;
 
                 case "2":
-                    EatCandy(db);
+                    EatCandyMenu.AddEatCandyMenu(db, userId);
                     break;
 
                 case "3":
                     EatRandomCandyMenu.AddRandomCandyMenu(db, userId);
-                    //EatRandomCandy(db);
                     break;
 
                 case "4":
@@ -103,6 +110,7 @@ namespace candy_market
             return false;
         }
 
+<<<<<<< HEAD
         // returns the name and id of the current user
         internal static Users GetUser(ConsoleKeyInfo selectedUser)
         {
@@ -159,6 +167,9 @@ namespace candy_market
         }
 
         public static void TradeCandyMenu(CandyStorage db, int userId, Users user)
+=======
+        public static void TradeCandy(CandyStorage db)
+>>>>>>> master
         {
             View candyMenuTradeWho = new View()
                     .AddMenuText($"Hello {user.Name}. Who would you like to trade with?")
