@@ -44,8 +44,8 @@ namespace candy_market
                     userSelected = true;
                 }
                 var userInput = MainMenu(user);
-                exit = TakeActions(db, userInput, user.Id);
 
+                exit = TakeActions(db, userInput, user.Id, user);
             }
         }
 
@@ -74,7 +74,7 @@ namespace candy_market
             return userOption;
         }
 
-        private static bool TakeActions(CandyStorage db, ConsoleKeyInfo userInput, int userId)
+        private static bool TakeActions(CandyStorage db, ConsoleKeyInfo userInput, int userId, Users user)
         {
             Console.Write(Environment.NewLine);
 
@@ -98,17 +98,12 @@ namespace candy_market
                     break;
 
                 case "4":
-                    TradeCandy(db);
+                    TradeCandyMenu.AddTradeCandyMenu(db, userId, user, candyUsers);
                     break;
 
                 default: return true;
             }
             return false;
-        }
-
-        public static void TradeCandy(CandyStorage db)
-        {
-            throw new NotImplementedException();
         }
     }
 }
