@@ -10,6 +10,9 @@ namespace candy_market.Menus
         public static void AddTradeCandyMenu(CandyStorage db, int userId, Users user, List<Users> candyUsers)
         {
             //Screen for choosing who to trade with
+            var yourName = user.Name;
+            var allNames = candyUsers.Select(u => u.Name).ToList();
+            var everyoneButYou = allNames.Remove(yourName);
             View candyMenuTradeWho = new View()
                     .AddMenuText($"Hello {user.Name}. Who would you like to trade with?")
                     .AddMenuOptions(candyUsers.Select(u => u.Name).ToList());
@@ -54,10 +57,10 @@ namespace candy_market.Menus
         internal static void TradeCandy(CandyStorage db, int userId, Users CandyTradeWho, string CandyRecieveWhat, string CandyGiveWhat)
         {
             var MyCandyBag = db.GetCandyByUserId(userId);
-            var PieceToTrade = MyCandyBag.Find(x => x.Name == CandyGiveWhat);
+            var PieceToTrade = MyCandyBag.Find(x => x.Name.ToLower() == CandyGiveWhat.ToLower());
 
             var TheirCandyBag = db.GetCandyByUserId(CandyTradeWho.Id);
-            var PieceToGet = TheirCandyBag.Find(x => x.Name == CandyRecieveWhat);
+            var PieceToGet = TheirCandyBag.Find(x => x.Name.ToLower() == CandyRecieveWhat.ToLower());
 
             if(PieceToGet != null && PieceToTrade != null)
             {
