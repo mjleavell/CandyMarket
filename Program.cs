@@ -168,12 +168,14 @@ namespace candy_market
             var CandyTradeWho = GetUser(selectedTradeUser);
 
             View candyMenuRecieveWhat = new View()
-                   .AddMenuOption("What would you like to get in this trade?");
+                   .AddMenuText("What would you like to get in this trade?");
+            var TheirCandyBag = db.GetCandyByUserId(CandyTradeWho.Id);
             Console.Write(candyMenuRecieveWhat.GetFullMenu());
+            
             var CandyRecieveWhat = Console.ReadLine();
 
             View candyMenuGiveWhat = new View()
-                    .AddMenuOption("What would you like to give in this trade?");
+                    .AddMenuText("What would you like to give in this trade?");
             Console.Write(candyMenuGiveWhat.GetFullMenu());
             var CandyGiveWhat = Console.ReadLine();
 
@@ -184,13 +186,12 @@ namespace candy_market
         {
             var MyCandyBag = db.GetCandyByUserId(userId);
             var PieceToTrade = MyCandyBag.Find(x => x.Name == CandyGiveWhat);
-            var TheirCadyBag = db.GetCandyByUserId(CandyTradeWho.Id);
-            var PieceToGet = TheirCadyBag.Find(x => x.Name == CandyRecieveWhat);
+            var TheirCandyBag = db.GetCandyByUserId(CandyTradeWho.Id);
+            var PieceToGet = TheirCandyBag.Find(x => x.Name == CandyRecieveWhat);
             PieceToGet.UserId = userId;
             PieceToTrade.UserId = CandyTradeWho.Id;
             Console.WriteLine($"You traded your {PieceToTrade.Name} for {CandyTradeWho.Name}'s {PieceToGet.Name}!");
             Console.ReadLine();
-
         }
     }
 }
